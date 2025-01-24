@@ -14,6 +14,21 @@ const links = ref<link[]>([
     label: "login",
   },
 ]);
+
+const supabase = useSupabaseClient();
+const user = useSupabaseUser();
+const router = useRouter();
+
+const LogOut = async () => {
+  try {
+    const { error } = await supabase.auth.signOut();
+    router.push("login/");
+
+    if (error) throw error;
+  } catch (error) {
+    console.log("Error with logging out: ", error);
+  }
+};
 </script>
 
 <template>
@@ -22,19 +37,31 @@ const links = ref<link[]>([
       <NuxtLink :to="{ name: 'index' }">
         <p class="text-2xl text-white uppercase font-bold">NUXT-LINKs</p>
       </NuxtLink>
-      <ul class="flex items-center justify-between gap-5 basis-[250px]">
-        <li v-for="link in links" class="capitalize" :key="link.to">
-          <NuxtLink :to="link.to">{{ link.label }}</NuxtLink>
-        </li>
-        <li>
-          <NuxtLink
-            :to="{
-              name: 'signUp',
-            }"
-          >
-            <UiButton type="normal"> Sign Up </UiButton>
-          </NuxtLink>
-        </li>
+      <ul>
+        <div
+          v-if="user?.aud !== 'authenticated'"
+          class="flex items-center justify-between gap-5 basis-[250px]"
+        >
+          <li v-for="link in links" class="capitalize" :key="link.to">
+            <NuxtLink :to="link.to">{{ link.label }}</NuxtLink>
+          </li>
+          <li>
+            <NuxtLink
+              :to="{
+                name: 'signUp',
+              }"
+            >
+              <UiButton type="normal"> Sign Up </UiButton>
+            </NuxtLink>
+          </li>
+        </div>
+        <div
+          v-else
+          class="flex items-center justify-between gap-5 basis-[250px]"
+        >
+          <p>{{ user.email }}</p>
+          <UiButton type="normal" @click="LogOut"> Log Out</UiButton>
+        </div>
       </ul>
     </nav>
   </header>

@@ -1,4 +1,8 @@
 <script setup lang="ts">
+definePageMeta({
+  name: "login",
+  middleware: "auth",
+});
 const router = useRouter();
 const supabase = useSupabaseClient();
 
