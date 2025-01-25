@@ -1,20 +1,4 @@
 <script setup lang="ts">
-interface link {
-  to: string;
-  label: string;
-}
-
-const links = ref<link[]>([
-  {
-    to: "/",
-    label: "home",
-  },
-  {
-    to: "/login",
-    label: "login",
-  },
-]);
-
 const supabase = useSupabaseClient();
 const user = useSupabaseUser();
 const router = useRouter();
@@ -42,16 +26,13 @@ const LogOut = async () => {
           v-if="user?.aud !== 'authenticated'"
           class="flex items-center justify-between gap-5 basis-[250px]"
         >
-          <li v-for="link in links" class="capitalize" :key="link.to">
-            <NuxtLink :to="link.to">{{ link.label }}</NuxtLink>
-          </li>
           <li>
             <NuxtLink
               :to="{
-                name: 'signUp',
+                name: 'login',
               }"
             >
-              <UiButton type="normal"> Sign Up </UiButton>
+              <UiButton type="normal"> Sign In </UiButton>
             </NuxtLink>
           </li>
         </div>
