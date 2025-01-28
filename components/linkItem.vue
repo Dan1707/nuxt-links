@@ -1,21 +1,26 @@
 <script setup lang="ts">
-interface link {
-  shortKey: string;
-  longUrl: string;
-  id: string;
-}
-
 defineProps<{
-  link: link;
+  link: {
+    shortKey: string;
+    longUrl: string | null;
+    id: number;
+  };
 }>();
 </script>
 
 <template>
-  <UiCard class="flex items-center justify-between">
+  <UiCard class="flex items-center justify-between cursor-pointer">
     <div>
-      <h3 class="text-4xl text-primary">{{ link.shortKey }}</h3>
+      <h3 class="text-4xl text-primary shrink-0">
+        {{ link.shortKey }}
+      </h3>
       <p class="text-xl text-secondary-border mt-[7px]">
-        {{ link.longUrl }}
+        <template v-if="link.longUrl && link.longUrl.length > 50">
+          {{ link.longUrl.slice(0, 50) }}...
+        </template>
+        <template v-else>
+          {{ link.longUrl }}
+        </template>
       </p>
     </div>
     <UiButton type="icon">
