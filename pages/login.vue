@@ -67,6 +67,14 @@ const signUpWithGithub = async () => {
     });
 
     console.log(data, user);
+
+    if (error) {
+      throw error;
+    } else {
+      useRouter().push({
+        name: "index",
+      });
+    }
   } catch (error) {
     console.log("Error with creating user by Github: ", error);
   }
